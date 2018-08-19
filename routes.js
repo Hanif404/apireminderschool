@@ -7,6 +7,7 @@ module.exports = function(app) {
     // Referensi data
     app.route('/sekolah').get(controller.getDataSekolah);
     app.route('/matapelajaran/:id').get(controller.getDataMataPelajaran);
+    app.route('/idmatapelajaran/:mp/:sk').get(controller.getIdPelajaran);
     app.route('/kelas/:id').get(controller.getDataKelas);
     app.route('/outerkelas/:id/:kl').get(controller.getDataOuterKelas);
     app.route('/siswa/:id').get(controller.getDaftarSiswa);
@@ -22,4 +23,16 @@ module.exports = function(app) {
     app.route('/datasiswa/:id').get(controller.dataSiswa);
     app.route('/deletesiswa/:id').get(controller.deleteSiswa);
     app.route('/pindahsiswa/:id/:kl').get(controller.pindahSiswa);
+
+    // Pengumuman
+    app.route('/saveevent').post(controller.saveEvent);
+    app.route('/event/:id').get(controller.getEvent);
+    app.route('/dataevent/:id').get(controller.dataEvent);
+    app.route('/deleteevent/:id').get(controller.deleteEvent);
+
+    // Pekerjaan Rumah
+    app.route('/pr/:id').get(controller.getDaftarPr);
+    app.route('/deletepr/:id').get(controller.deletePr);
+    app.route('/savepr').post(controller.savePr);
+    app.route('/datapr/:id').get(controller.dataPr);
 };
