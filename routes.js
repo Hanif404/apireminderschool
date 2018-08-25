@@ -35,4 +35,11 @@ module.exports = function(app) {
     app.route('/deletepr/:id').get(controller.deletePr);
     app.route('/savepr').post(controller.savePr);
     app.route('/datapr/:id').get(controller.dataPr);
+
+    app.route('/absensi').post(controller.absensi);
+    
+    app.route('/upload').post(controller.upload);
+    app.route('/setfoto').post(controller.updateFoto);
+    app.route('/getfoto/:id').get(controller.ambilFoto);
+    app.route('/delfoto/:id').get(controller.hapusFoto);
 };

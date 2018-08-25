@@ -2,6 +2,7 @@
 
 var response = require('./res');
 var connection = require('./conn');
+var fs = require('fs');
 
 exports.getDataSekolah = function(req, res) {
   var sql = 'SELECT id, name FROM sekolah';
@@ -267,6 +268,88 @@ exports.dataPr = function(req, res) {
           console.log(error)
       } else{
           response.ok(rows, res)
+      }
+  });
+};
+
+exports.absensi = function(req, res){
+  var sql = "INSERT INTO absensi (id_siswa, id_guru, id_pelajaran, tgl_absen, is_absen) VALUES ("+req.body.siswa+", "+req.body.guru+", "+req.body.pelajaran+", NOW(), "+req.body.absen+")";
+  connection.query(sql, function (error, rows, fields){
+      if(error){
+          console.log(error);
+      }else{
+        response.ok(rows, res);
+      }
+  });
+}
+
+exports.upload = function(req, res) {
+  let fileprofile = req.files.fileprofile;
+  let filename = req.files.fileprofile.name;
+  fileprofile.mv(__dirname + '/file/'+ filename, function(err) {
+    if(err){
+        console.log(error);
+    }
+
+    res.send('File uploaded!');
+  });
+};
+
+exports.updateFoto = function(req, res){
+  var sql = "UPDATE guru SET foto='"+req.body.foto+"' WHERE id = "+req.body.id;
+  connection.query(sql, function (error, rows, fields){
+      if(error){
+          console.log(error);
+      }else {
+        response.ok(rows, res);
+      }
+  });
+};
+
+exports.ambilFoto = function(req, res) {
+  var options = {
+    root: __dirname + '/file/',
+    dotfiles: 'deny',
+    headers: {
+        'x-timestamp': Date.now(),
+        'x-sent': true
+    }
+  };
+
+  var sql = "SELECT foto FROM guru where id = "+ req.params.id;
+  connection.query(sql, function (error, rows, fields){
+      if(error){
+          console.log(error)
+      } else{
+        if(rows[0].foto != ""){
+          res.sendFile(rows[0].foto, options, function (err) {
+            if (err) {
+              console.log(err)
+            }
+          });
+        }else{
+          res.send('');
+        }
+      }
+  });
+};
+
+exports.hapusFoto = function(req, res) {
+  var path = __dirname + '/file/';
+
+  var sql = "SELECT foto FROM guru where id = "+ req.params.id;
+  connection.query(sql, function (error, rows, fields){
+      if(error){
+          console.log(error)
+      } else{
+        if(rows[0].foto != ""){
+          fs.unlink(path + rows[0].foto,function(err){
+              if(err) return console.log(err);
+              res.send('hapus file berhasil');
+           });
+        }else{
+          res.send('tidak ada file');
+        }
       }
   });
 };
