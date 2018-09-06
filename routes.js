@@ -37,9 +37,14 @@ module.exports = function(app) {
     app.route('/datapr/:id').get(controller.dataPr);
 
     app.route('/absensi').post(controller.absensi);
-    
+
     app.route('/upload').post(controller.upload);
     app.route('/setfoto').post(controller.updateFoto);
     app.route('/getfoto/:id').get(controller.ambilFoto);
     app.route('/delfoto/:id').get(controller.hapusFoto);
+
+    // Notifikasi
+    app.route('/akunortu').post(controller.addOrtu);
+    app.route('/loginortu').post(controller.loginOrtu);
+    app.route('/notifAbsensi/:id').get(controller.getNotifAbsensi);
 };

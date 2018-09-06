@@ -354,6 +354,40 @@ exports.hapusFoto = function(req, res) {
   });
 };
 
+// Notifikasi orangtua
+exports.getNotifAbsensi = function(req, res){
+  var sql = 'SELECT abs.id, mp.name AS nm_mp, gr.name as nm_gr, DATE_FORMAT(abs.tgl_absen, "%d/%m/%Y") as tgl_absen, abs.is_absen FROM absensi abs LEFT JOIN siswa sw ON abs.id_siswa = sw.id LEFT JOIN guru gr ON abs.id_guru = gr.id LEFT JOIN mata_pelajaran mp ON abs.id_pelajaran = mp.id WHERE abs.tgl_absen = CURDATE() AND sw.nisn = '+ req.params.id;
+  connection.query(sql, function (error, rows, fields){
+      if(error){
+          console.log(error)
+      } else{
+        response.ok(rows, res);
+      }
+  });
+}
+
+exports.addOrtu = function(req, res){
+  var sql = "INSERT INTO ortu (nisn, name, no_telp, alamat, id_sekolah, username, password) VALUES ('"+req.body.nisn+"', '"+req.body.nama+"', '"+req.body.noTelp+"', '"+req.body.alamat+"', "+req.body.idSekolah+", '"+req.body.username+"', '"+req.body.password+"')";
+  connection.query(sql, function (error, rows, fields){
+      if(error){
+          console.log(error)
+      }else {
+        response.ok(rows, res);
+      }
+  });
+}
+
+exports.loginOrtu = function(req, res){
+  var sql = "SELECT id, nisn, name, id_sekolah FROM ortu where username = '"+req.body.user+"' and password = '"+req.body.pass+"'";
+  connection.query(sql, function (error, rows, fields){
+      if(error){
+          console.log(error)
+      }else{
+          response.ok(rows, res)
+      }
+  });
+}
+
 exports.index = function(req, res) {
     response.ok("Hello from the Node JS RESTful side!", res)
 };
