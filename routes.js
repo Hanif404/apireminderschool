@@ -46,5 +46,8 @@ module.exports = function(app) {
     // Notifikasi
     app.route('/akunortu').post(controller.addOrtu);
     app.route('/loginortu').post(controller.loginOrtu);
+    app.route('/checksiswa').post(controller.checkSiswa);
     app.route('/notifAbsensi/:id').get(controller.getNotifAbsensi);
+    app.route('/notifPr/:id').get(controller.getNotifPekerjaanRumah);
+    app.route('/notifPengumuman/:id').get(controller.getNotifPengumuman);
 };

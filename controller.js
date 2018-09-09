@@ -354,9 +354,33 @@ exports.hapusFoto = function(req, res) {
   });
 };
 
-// Notifikasi orangtua
+// Notifikasi Absensi
 exports.getNotifAbsensi = function(req, res){
   var sql = 'SELECT abs.id, mp.name AS nm_mp, gr.name as nm_gr, DATE_FORMAT(abs.tgl_absen, "%d/%m/%Y") as tgl_absen, abs.is_absen FROM absensi abs LEFT JOIN siswa sw ON abs.id_siswa = sw.id LEFT JOIN guru gr ON abs.id_guru = gr.id LEFT JOIN mata_pelajaran mp ON abs.id_pelajaran = mp.id WHERE abs.tgl_absen = CURDATE() AND sw.nisn = '+ req.params.id;
+  connection.query(sql, function (error, rows, fields){
+      if(error){
+          console.log(error)
+      } else{
+        response.ok(rows, res);
+      }
+  });
+}
+
+// Notifikasi PR
+exports.getNotifPekerjaanRumah = function(req, res){
+  var sql = 'SELECT pr.id, mp.name AS nm_mp, gr.name AS nm_gr, pr.isi_pr, DATE_FORMAT(pr.tgl_pr, "%d/%m/%Y") as tgl_pr, DATE_FORMAT(pr.tgl_selesai, "%d/%m/%Y") as tgl_selesai FROM pekerjaan_rumah pr LEFT JOIN mata_pelajaran mp ON pr.id_pelajaran = mp.id LEFT JOIN guru gr ON pr.id_guru = gr.id LEFT JOIN siswa sw ON pr.id_kelas = sw.id_kelas WHERE sw.nisn = '+req.params.id+' AND pr.tgl_selesai BETWEEN DATE_SUB(pr.tgl_selesai, INTERVAL 1 WEEK) AND pr.tgl_selesai' ;
+  connection.query(sql, function (error, rows, fields){
+      if(error){
+          console.log(error)
+      } else{
+        response.ok(rows, res);
+      }
+  });
+}
+
+// Notifikasi Pengumuman
+exports.getNotifPengumuman = function(req, res){
+  var sql = 'SELECT ag.id, ag.judul, DATE_FORMAT(ag.tgl_pengumuman, "%d/%m/%Y") AS tgl_pengumuman, ag.isi_pengumuman, DATE_FORMAT(ag.tgl_mulai, "%d/%m/%Y") as tgl_mulai, DATE_FORMAT(ag.tgl_selesai, "%d/%m/%Y") as tgl_selesai, DATE_FORMAT(ag.wkt_mulai, "%H:%i") as wkt_mulai, DATE_FORMAT(ag.wkt_selesai, "%H:%i") as wkt_selesai FROM pengumuman ag LEFT JOIN siswa sw ON ag.id_kelas = sw.id_kelas WHERE sw.nisn = '+req.params.id+' AND ag.tgl_mulai BETWEEN DATE_SUB(ag.tgl_mulai, INTERVAL 1 WEEK) AND ag.tgl_mulai' ;
   connection.query(sql, function (error, rows, fields){
       if(error){
           console.log(error)
@@ -384,6 +408,21 @@ exports.loginOrtu = function(req, res){
           console.log(error)
       }else{
           response.ok(rows, res)
+      }
+  });
+}
+
+exports.checkSiswa = function(req, res){
+  var sql = "SELECT sw.id FROM siswa sw LEFT JOIN kelas kl ON sw.id_kelas = kl.id WHERE kl.id_sekolah = "+req.body.sekolah+" AND sw.nisn = '"+req.body.nisn+"'";
+  connection.query(sql, function (error, rows, fields){
+      if(error){
+          console.log(error)
+      }else{
+        if(rows.length > 0){
+          response.ok(true, res)
+        }else{
+          response.ok(false, res)
+        }
       }
   });
 }
