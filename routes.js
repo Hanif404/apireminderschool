@@ -50,4 +50,9 @@ module.exports = function(app) {
     app.route('/notifAbsensi/:id').get(controller.getNotifAbsensi);
     app.route('/notifPr/:id').get(controller.getNotifPekerjaanRumah);
     app.route('/notifPengumuman/:id').get(controller.getNotifPengumuman);
+
+    app.route('/checkguru').post(controller.checkUsernameGuru);
+    app.route('/resetguru').post(controller.resetPasswordGuru);
+    app.route('/checkortu').post(controller.checkUsernameOrtu);
+    app.route('/resetortu').post(controller.resetPasswordOrtu);
 };

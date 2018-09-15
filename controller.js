@@ -427,6 +427,58 @@ exports.checkSiswa = function(req, res){
   });
 }
 
+exports.checkUsernameGuru = function(req, res){
+  var sql = "SELECT username FROM guru WHERE LOWER(username) = LOWER('"+req.body.username+"')";
+  connection.query(sql, function (error, rows, fields){
+      if(error){
+          console.log(error)
+      }else{
+        if(rows.length > 0){
+          response.ok(true, res)
+        }else{
+          response.ok(false, res)
+        }
+      }
+  });
+}
+
+exports.resetPasswordGuru = function(req, res){
+  var sql = "UPDATE guru SET password='"+req.body.password+"' WHERE LOWER(username) = LOWER('"+req.body.username+"')";
+  connection.query(sql, function (error, rows, fields){
+      if(error){
+          console.log(error);
+      }else {
+        response.ok(rows, res);
+      }
+  });
+};
+
+exports.checkUsernameOrtu = function(req, res){
+  var sql = "SELECT username FROM ortu WHERE LOWER(username) = LOWER('"+req.body.username+"')";
+  connection.query(sql, function (error, rows, fields){
+      if(error){
+          console.log(error)
+      }else{
+        if(rows.length > 0){
+          response.ok(true, res)
+        }else{
+          response.ok(false, res)
+        }
+      }
+  });
+}
+
+exports.resetPasswordOrtu = function(req, res){
+  var sql = "UPDATE ortu SET password='"+req.body.password+"' WHERE LOWER(username) = LOWER('"+req.body.username+"')";
+  connection.query(sql, function (error, rows, fields){
+      if(error){
+          console.log(error);
+      }else {
+        response.ok(rows, res);
+      }
+  });
+};
+
 exports.index = function(req, res) {
     response.ok("Hello from the Node JS RESTful side!", res)
 };
